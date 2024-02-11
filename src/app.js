@@ -46,7 +46,7 @@ app.get("/products/:pid", async (req, res) => {
         res.status(500).send("Internal server error");
     }
 });
-
+//listening
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
