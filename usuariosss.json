@@ -1,56 +1,56 @@
 [
-  {
-    "id": 1,
-    "title": "Laptop2",
-    "description": "Powerful laptop",
-    "price": 1200,
-    "thumbnail": "laptop.jpg",
-    "code": "LP002",
-    "stock": 50
-  },
-  {
-    "id": 2,
-    "title": "Laptop3",
-    "description": "Powerful laptop for professional use",
-    "price": 1200,
-    "thumbnail": "laptop.jpg",
-    "code": "LP0a01",
-    "stock": 50
-  },
-  {
-    "id": 3,
-    "title": "Laptop3",
-    "description": "Powerful laptop3",
-    "price": 1200,
-    "thumbnail": "laptop.jpg3",
-    "code": "LP0023",
-    "stock": 50
-  },
-  {
-    "id": 4,
-    "title": "Laptop4",
-    "description": "Powerful laptop4",
-    "price": 1200,
-    "thumbnail": "laptop.jpg4",
-    "code": "LP0024",
-    "stock": 50
-  },
-  {
-    "id": 5,
-    "title": "Laptop5",
-    "description": "Powerful laptop5",
-    "price": 1200,
-    "thumbnail": "laptop.jpg5",
-    "code": "LP0025",
-    "stock": 50
-  },
-  {
-    "id": 6,
-    "title": "Laptop6",
-    "description": "Powerful laptop6",
-    "price": 1200,
-    "thumbnail": "laptop.jpg6",
-    "code": "LP0026",
-    "stock": 50
-  }
-]
+    {
+      "id": 1,
+      "title": "Laptop2",
+      "description": "Powerful laptop",
+      "price": 1200,
+      "thumbnail": "laptop.jpg",
+      "code": "LP002",
+      "stock": 50
+    },
+    {
+      "id": 2,
+      "title": "Laptop3",
+      "description": "Powerful laptop for professional use",
+      "price": 1200,
+      "thumbnail": "laptop.jpg",
+      "code": "LP0a01",
+      "stock": 50
+    },
+    {
+      "id": 3,
+      "title": "Laptop3",
+      "description": "Powerful laptop3",
+      "price": 1200,
+      "thumbnail": "laptop.jpg3",
+      "code": "LP0023",
+      "stock": 50
+    },
+    {
+      "id": 4,
+      "title": "Laptop4",
+      "description": "Powerful laptop4",
+      "price": 1200,
+      "thumbnail": "laptop.jpg4",
+      "code": "LP0024",
+      "stock": 50
+    },
+    {
+      "id": 5,
+      "title": "Laptop5",
+      "description": "Powerful laptop5",
+      "price": 1200,
+      "thumbnail": "laptop.jpg5",
+      "code": "LP0025",
+      "stock": 50
+    },
+    {
+      "id": 6,
+      "title": "Laptop6",
+      "description": "Powerful laptop6",
+      "price": 1200,
+      "thumbnail": "laptop.jpg6",
+      "code": "LP0026",
+      "stock": 50
+    }
+  ]

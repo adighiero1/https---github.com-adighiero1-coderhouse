@@ -6,7 +6,7 @@ class ProductManager {
     constructor() {
         this.products = [];
         this.Id = 1;
-        this.rutaArchivo = "C:/Users/Ale/Desktop/desafios/src/usuariosss.json";
+        this.rutaArchivo = "./usuariosss.json";
         this.initializeFile(); // Call the method to initialize the file
     }
 
