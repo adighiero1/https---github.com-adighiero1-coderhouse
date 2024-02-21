@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "motorola",
+    "description": "Powerful laptosdp for professional use2",
+    "price": 40000000000,
+    "thumbnail": "laptopf.jpg",
+    "code": "LPa0a041",
+    "stock": 50,
+    "category": "electornicss",
+    "status": true
+  },
+  {
+    "id": 2,
+    "title": "motorola2",
+    "description": "Powerful laptosdp for professional use2",
+    "price": 130330,
+    "thumbnail": "laptopff.jpg",
+    "code": "LPa0af041",
+    "stock": 50,
+    "category": "electornicss",
+    "status": true
+  },
+  {
+    "id": 3,
+    "title": "Ipad",
+    "description": "Powerful laptosdp for professional use2",
+    "price": 1330,
+    "thumbnail": "laptopff.jpg",
+    "code": "LPa0aaf041",
+    "stock": 50,
+    "category": "electornicss",
+    "status": true
+  }
+]
