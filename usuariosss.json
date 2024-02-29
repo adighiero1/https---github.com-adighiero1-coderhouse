@@ -1,80 +1,24 @@
 [
   {
-    "id": 1,
-    "title": "THIS NEW TITLE",
-    "description": "Portable Bluetooth speaker with crisp sound quality",
-    "price": 4999,
-    "thumbnail": "new_thumbnail.jpg",
-    "code": "BS456",
-    "stock": 200,
-    "category": "white product",
-    "status": true
-  },
-  {
-    "id": 2,
-    "title": "Iphone",
-    "description": "portable Iphone",
-    "price": 499,
-    "thumbnail": "new_thumbnail.jpg",
-    "code": "IS456",
-    "stock": 100,
-    "category": "white product",
-    "status": true
-  },
-  {
-    "id": 3,
-    "title": "THIS NEW TITLE",
-    "description": "Portable Motorola S9",
-    "price": 999,
-    "thumbnail": "ne4w_thumbnail.jpg",
-    "code": "PS456",
-    "stock": 95,
-    "category": "white product",
-    "status": true
-  },
-  {
     "id": 4,
-    "title": "Keyboard",
-    "description": "Portable keyboard",
-    "price": 999,
-    "thumbnail": "ne4w_thumgbnail.jpg",
-    "code": "kS456",
-    "stock": 200,
-    "category": "white product",
+    "title": "television",
+    "description": "wonderfull television",
+    "price": "50",
+    "thumbnail": "sfdasdf.html",
+    "code": "ACB16",
+    "stock": "500",
+    "category": "electronics",
     "status": true
   },
   {
     "id": 5,
-    "title": "Television computer",
-    "description": "Portable Bluetooth speaker with crisp sound quality",
-    "price": 4999,
-    "thumbnail": "new_thumbnail.jpg",
-    "code": "TS456",
-    "stock": 200,
-    "category": "Electronics",
-    "status": true
-  },
-  {
-    "id": 6,
-    "title": "Television computer3",
-    "description": "Portable Bluetooth speaker with crisp sound quality",
-    "price": 4999,
-    "thumbnail": "new_thumbnail.jpg",
-    "code": "T3S456",
-    "stock": 200,
-    "category": "Electronics",
-    "status": true
-  },
-  {
-    "id": 7,
-    "title": "Television computer4",
-    "description": "Portable Bluetooth speaker with crisp sound quality",
-    "price": 4999,
-    "thumbnail": "new_thumbnail.jpg",
-    "code": "T63S456",
-    "stock": 200,
-    "category": "Electronics",
+    "title": "Mirror",
+    "description": "mirror",
+    "price": "80",
+    "thumbnail": "sfdfasdf.html",
+    "code": "ACB1666",
+    "stock": "5000",
+    "category": "Furniture",
     "status": true
   }
 ]
-

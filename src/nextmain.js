@@ -75,7 +75,7 @@
            }
        }
    
-       async getProducts() {
+     async getProducts() {
            try {
                const products = await this.readProducts();
                console.log("Products registered:", products);

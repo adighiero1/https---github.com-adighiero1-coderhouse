@@ -1,0 +1,16 @@
+<div class="heading-container">
+    <h1>Available Products</h1>
+</div>
+<div id="productContainer" class="container"></div>
+
+ {{! -- is connected to the Express route (router.get("/")) through the res.render method. --}}
+
+<div class="classContainer">
+    {{#each products}}
+        <div class="card">
+            <p> Product: {{this.title}} </p>
+            <p> Description: {{this.description}} </p>
+            <p> Price: {{this.price}} </p>
+        </div>
+    {{/each}}
+</div>
