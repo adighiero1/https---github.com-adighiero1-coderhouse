@@ -1,19 +1,16 @@
-
-
+<!-- Container for the heading -->
 <div class="heading-container">
     <h1>Available Products</h1>
 </div>
+
+<!-- Container for the products -->
 <div id="productContainer" class="container"></div>
 
-<div id="productContainer"></div>
-
-<br>
-<br>
-
-
+<!-- Form to add a new product -->
 <div class="form-container">
     <h2>Add Product</h2>
     <form>
+        <!-- Input fields for product details -->
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" id="title" placeholder="Title">
@@ -49,12 +46,14 @@
                 <option value="false">Inactive</option>
             </select>
         </div>
+        <!-- Button to add a product -->
         <div class="form-group">
             <button type="button" onclick="addProduct()">Add Product</button>
         </div>
     </form>
 </div>
 
-
+<!-- Include the Socket.IO library -->
 <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+<!-- Include the main.js file for socket connection and event handling -->
 <script src="/js/main.js"></script>

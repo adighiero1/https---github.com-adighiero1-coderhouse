@@ -1,16 +1,5 @@
 [
   {
-    "id": 4,
-    "title": "television",
-    "description": "wonderfull television",
-    "price": "50",
-    "thumbnail": "sfdasdf.html",
-    "code": "ACB16",
-    "stock": "500",
-    "category": "electronics",
-    "status": true
-  },
-  {
     "id": 5,
     "title": "Mirror",
     "description": "mirror",
@@ -19,6 +8,17 @@
     "code": "ACB1666",
     "stock": "5000",
     "category": "Furniture",
+    "status": true
+  },
+  {
+    "id": 6,
+    "title": "keyboard",
+    "description": "asdfasdf",
+    "price": "5",
+    "thumbnail": "asdfasf",
+    "code": "434a",
+    "stock": "5",
+    "category": "asdf",
     "status": true
   }
 ]
