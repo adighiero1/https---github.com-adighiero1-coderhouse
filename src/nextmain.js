@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import productModel from "./models/product.model.js";
+import mongoose from "mongoose";
 
 class ProductManager {
     async addProduct(title, description, price, thumbnail, code, stock, category) {
@@ -81,7 +82,7 @@ class ProductManager {
 
     async deleteProduct(id) {
         try {
-            const deletedProduct = await productModel.findByIdAndDelete(id);
+            const deletedProduct = await productModel.findByIdAndDelete(mongoose.Types.ObjectId.createFromHexString(id));
             if (!deletedProduct) {
                 console.error("Product not found for deletion");
                 return null;
@@ -94,6 +95,7 @@ class ProductManager {
             return null;
         }
     }
+    
 }
 
 export default ProductManager;

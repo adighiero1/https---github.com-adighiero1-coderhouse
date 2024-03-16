@@ -1,6 +1,6 @@
 import express from "express";
 import ProductManager from "../nextmain.js";
-
+import mongoose from "mongoose";
 const router = express.Router();
 const productManager = new ProductManager();
 
@@ -83,13 +83,20 @@ router.put("/:pid", async (req, res) => {
     }
 });
 
-router.delete("/:pid", async (req,res)=>{
-    try{
-        const pid = parseInt(req.params.pid);
+router.delete("/:pid", async (req, res) => {
+    try {
+        const pid = req.params.pid;
+        if (!mongoose.Types.ObjectId.isValid(pid)) {
+            return res.status(400).send("Invalid product ID");
+        }
+
         const product = await productManager.deleteProduct(pid);
-        res.status(201).json(product);
-    }
-    catch{
+        if (!product) {
+            return res.status(404).send("Product not found");
+        }
+
+        res.status(200).json(product);
+    } catch (error) {
         console.error("Error deleting product:", error);
         res.status(500).send("Server error");
     }

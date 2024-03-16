@@ -7,6 +7,9 @@ import { Server } from "socket.io"; // Import the Socket.IO server
 import viewsRouter from "./routes/views.router.js"; // Import the views router
 import ProductManager from "./nextmain.js"; // Import the ProductManager class
 import "./connect.js";
+import messageModel from "./models/message.model.js";
+import Swal from "sweetalert2";
+
 // Create an instance of ProductManager
 const productmanager = new ProductManager();
 
@@ -79,6 +82,18 @@ io.on("connection", async (socket) => {
             io.sockets.emit("products", await productmanager.getProducts());
         } catch (error) {
             console.error("Error adding product:", error);
+        }
+    });
+
+    socket.on("message", async (data) => {
+        try {
+            console.log("Received message:", data);
+            // Save the message to the database
+            await messageModel.create(data);
+            // Emit the message to all clients, including the sender
+            io.emit("message", data);
+        } catch (error) {
+            console.error("Error saving message:", error);
         }
     });
 });
