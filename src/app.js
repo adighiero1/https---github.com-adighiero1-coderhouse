@@ -20,7 +20,12 @@ const app = express();
 const PORT = 8080;
 
 // Configure Handlebars as the template engine
-app.engine("handlebars", exphbs.engine());
+app.engine("handlebars", exphbs.engine({
+    runtimeOptions:{
+        allowProtoMethodsByDefault:true,
+        allowProtoPropertiesByDefault:true,
+    }
+}));
 // Set the view engine to use Handlebars
 app.set("view engine", "handlebars");
 // Set the directory where the views are located
@@ -40,7 +45,7 @@ app.use("/carts", cartsRouter);
 app.use("/products", productsRouter);
 // Use the views router for requests to '/'
 app.use("/", viewsRouter);
-
+app.use("/products",viewsRouter);
 // Start the HTTP server and listen on the specified port
 const httpServer = app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

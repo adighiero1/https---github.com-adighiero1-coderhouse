@@ -31,16 +31,108 @@ class ProductManager {
             return null;
         }
     }
+// // old get products
+//     async getProducts({ skip = 0, limit = 2 }) {
+//         try {
+//           // Use Mongoose find() with optional chaining and default values
+//           const productos = await productModel.find({}, { skip: skip?.valueOf() || 0, limit: limit?.valueOf() || 2 });
+//           return productos;
+//         } catch (error) {
+//           console.log("Error fetching products", error);
+//           throw error; // Re-throw the error for proper handling
+//         }
+//       }
 
-    async getProducts() {
-        try {
-            const productos = await productModel.find(); 
-            return productos;
-        } catch (error) {
-            console.log("Error fetching products", error); 
-            throw error; 
+// async getProducts({ limit = 2, page = 1, sort, query } = {}) {
+//     try {
+//         const skip = (page - 1) * limit;
+
+//         let queryOptions = {};
+
+//         if (query) {
+//             queryOptions = { category: query };
+//         }
+
+//         const sortOptions = {};
+//         if (sort) {
+//             if (sort === 'asc' || sort === 'desc') {
+//                 sortOptions.price = sort === 'asc' ? 1 : -1;
+//             }
+//         }
+
+//         const products = await productModel
+//             .find(queryOptions)
+//             .sort(sortOptions)
+//             .skip(skip)
+//             .limit(limit);
+
+//         const totalProducts = await productModel.countDocuments(queryOptions);
+
+//         const totalPages = Math.ceil(totalProducts / limit);
+//         const hasPrevPage = page > 1;
+//         const hasNextPage = page < totalPages;
+
+//         const baseUrl = `/products?limit=${limit}&sort=${sort}&query=${query}`;
+
+//         return {
+//             docs: products,
+//             totalPages,
+//             prevPage: hasPrevPage ? page - 1 : null,
+//             nextPage: hasNextPage ? page + 1 : null,
+//             page,
+//             hasPrevPage,
+//             hasNextPage,
+//             prevLink: hasPrevPage ? `${baseUrl}&page=${page - 1}` : null,
+//             nextLink: hasNextPage ? `${baseUrl}&page=${page + 1}` : null,
+//         };
+//     } catch (error) {
+//         console.error("Error fetching products:", error);
+//         throw error;
+//     }
+// }
+
+async getProducts({ limit = 2, page = 1, sort, query } = {}) {
+    try {
+        const skip = (page - 1) * limit;
+
+        let queryOptions = {};
+        if (query) {
+            queryOptions = { category: query };
         }
+
+        const sortOptions = {};
+        if (sort) {
+            if (sort === 'asc' || sort === 'desc') {
+                sortOptions.price = sort === 'asc' ? 1 : -1;
+            }
+        }
+
+        const products = await productModel
+            .find(queryOptions)
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(limit);
+
+        const totalProducts = await productModel.countDocuments(queryOptions);
+        const totalPages = Math.ceil(totalProducts / limit);
+        const hasPrevPage = page > 1;
+        const hasNextPage = page < totalPages;
+
+        return {
+            docs: products,
+            totalPages,
+            hasPrevPage,
+            hasNextPage,
+            prevPage: hasPrevPage ? page - 1 : null,
+            nextPage: hasNextPage ? page + 1 : null,
+            page,
+        };
+    } catch (error) {
+        console.log("Error fetching products", error);
+        throw error;
     }
+}
+
 
 
     async getProductById(id) {

@@ -1,16 +1,40 @@
-<div class="heading-container">
-    <h1>Available Products</h1>
-</div>
-<div id="productContainer" class="container"></div>
+<!DOCTYPE html>
+<html lang="en">
 
- {{! -- is connected to the Express route (router.get("/")) through the res.render method. --}}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
 
-<div class="classContainer">
-    {{#each products}}
+<body>
+    <div class="container">
+        <h1>Products</h1>
+
+        {{#each products}}
         <div class="card">
-            <p> Product: {{this.title}} </p>
-            <p> Description: {{this.description}} </p>
-            <p> Price: {{this.price}} </p>
+            <h2>{{title}}</h2>
+            <p>{{description}}</p>
+            <p>Price: ${{price}}</p>
+            <p>Category: {{category}}</p>
+            <button>Add to Cart</button>
         </div>
-    {{/each}}
-</div>
+        {{/each}}
+
+        <div class="pagination">
+            {{#if hasPrevPage}}
+            <a href="/products?page={{prevPage}}">Previous</a>
+            {{/if}}
+
+            <span>Page {{currentPage}} of {{totalPages}}</span>
+
+            {{#if hasNextPage}}
+            <a href="/products?page={{nextPage}}">Next</a>
+            {{/if}}
+        </div>
+    </div>
+</body>
+
+</html>

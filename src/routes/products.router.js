@@ -4,24 +4,24 @@ import mongoose from "mongoose";
 const router = express.Router();
 const productManager = new ProductManager();
 
-router.get("/", async(req,res)=>{
-    let limit= parseInt(req.query.limit);
-    try{
-        const products=await productManager.getProducts();
-        if(limit){
-            let listproducts=products.slice(0,limit);
-            res.json(listproducts);
-        }
-        else{
-            res.json(products);
-        }
+// router.get("/", async(req,res)=>{
+//     let limit= parseInt(req.query.limit);
+//     try{
+//         const products=await productManager.getProducts();
+//         if(limit){
+//             let listproducts=products.slice(0,limit);
+//             res.json(listproducts);
+//         }
+//         else{
+//             res.json(products);
+//         }
 
-    }
-    catch (error){
-        console.error("Error fetching products:", error);
-        res.status(500).send("Internal server error");
-    }
-});
+//     }
+//     catch (error){
+//         console.error("Error fetching products:", error);
+//         res.status(500).send("Internal server error");
+//     }
+// });
 
 router.get("/:pid", async (req, res) => {
     try {
