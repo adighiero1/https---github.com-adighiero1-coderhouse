@@ -31,7 +31,9 @@ const router = express.Router();
 
 
 router.get("/", async (req, res) => {
-    res.render("chat");
+    // res.render("chat");
+    console.log("Session ID:", req.sessionID);
+    res.redirect("/login");//redirects to the login.
  })
 
 // Define a route for the realtimeproducts page ("/realtimeproducts")
@@ -42,7 +44,8 @@ router.get("/realtimeproducts", async (req, res) => {
 
 router.get("/products", async (req, res) => {
     const { page = 1, limit = 2, sort, query } = req.query;
-
+    const user = req.session.user; // Use user instead of userdetails
+    console.log(user); // Ensure that user contains the correct properties
     try {
         const products = await productManager.getProducts({
             page: parseInt(page),
@@ -59,6 +62,7 @@ router.get("/products", async (req, res) => {
             nextPage: products.nextPage,
             currentPage: products.page,
             totalPages: products.totalPages,
+            user: user // Pass user instead of userdetails
         });
     } catch (error) {
         console.error("Error fetching products:", error);
@@ -82,6 +86,34 @@ router.get("/cart/:cid", async (req, res) => {
         console.error("Error fetching cart products", error);
         res.status(500).send("Internal Server Error");
     }
+});
+
+router.get("/register", (req, res) => {
+    if(req.session.login) {
+        return res.redirect("/profile");
+    }
+    res.render("register");
+})
+
+router.get("/login", (req, res) => {
+    res.render("login");
+})
+
+router.get("/profile", (req, res) => {
+    if(!req.session.login){
+        return res.redirect("/login");
+    }
+    res.render("profile", {user: req.session.user})
+})
+
+router.post("/logout", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).send("Internal Server Error");
+        }
+        res.redirect("/login");
+    });
 });
 
 // Define a route for t
