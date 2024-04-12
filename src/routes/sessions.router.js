@@ -1,7 +1,8 @@
 import express from "express";
 const router = express.Router(); 
 import UserModel from "../models/user.model.js";
-
+import { createHash, isValidPassword } from "../utils/hashbcrypt.js";
+import passport from "passport";
 // sessions.router.js
 
 // router.post("/register", async (req, res) => {
@@ -61,96 +62,165 @@ import UserModel from "../models/user.model.js";
 //     }
 // });
 
-router.post("/register", async (req, res) => {
-    const { first_name, last_name, email, password, age } = req.body;
 
-    try {
-        // Check if the email is already registered
-        const existingUser = await UserModel.findOne({ email: email });
-        if (existingUser) {
-            return res.status(400).send("The email is already in use");
-        }
-
-        // Check if the email is for an admin
-        const isAdmin = email.includes("adminCoder@coder.com");
-
-        // Skip saving admin users to the database
-        if (isAdmin) {
-            // Redirect to the admin profile page
-            req.session.login = true;
-            req.session.user = {
-                email,
-                age,
-                first_name,
-                last_name,
-                isAdmin
-            };
-            return res.redirect("/profile");
-        } else {
-            // Create a new user
-            const newUser = await UserModel.create({ first_name, last_name, email, password, age });
-
-            // Set the session variables
-            req.session.login = true;
-            req.session.user = { 
-                email, 
-                age, 
-                first_name, 
-                last_name,
-                isAdmin
-            };
-
-            // Redirect to the regular profile page
-            res.redirect("/profile");
-        }
-    } catch (error) {
-        console.error("Error creating user:", error);
-        res.status(500).send("Server Error");
-    }
-});
-
-router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        const usuario = await UserModel.findOne({ email: email });
-        if (usuario) {
-            if (usuario.password === password) {
-                // Check if the email is for an admin
-                const isAdmin = email.includes("adminCoder@coder.com");
-
-                req.session.login = true;
-                req.session.user = {
-                    email: usuario.email,
-                    age: usuario.age,
-                    first_name: usuario.first_name,
-                    last_name: usuario.last_name,
-                    isAdmin
-                }
-
-                console.log("Login successful for email:", email);
-                if (isAdmin) {
-                    res.redirect("/profile");
-                } else {
-                    res.redirect("/products");
-                }
-            } else {
-                console.log("Incorrect password for email:", email);
-                res.status(401).send("Contraseña no válida");
-            }
-        } else {
-            console.log("User not found for email:", email);
-            res.status(404).send("Usuario no encontrado");
-        }
-    } catch (error) {
-        console.error("Error during login:", error);
-        res.status(500).send("Error interno del servidor");
-    }
-});
+/////Don't remember whats above this line/////////////
 
 
 
 
+
+////////////////////////////////PRE Passport///////////////////////////
+// router.post("/register", async (req, res) => {
+//     const { first_name, last_name, email, password, age } = req.body;
+
+//     try {
+//         // Check if the email is already registered
+//         const existingUser = await UserModel.findOne({ email: email });
+//         if (existingUser) {
+//             return res.status(400).send("The email is already in use");
+//         }
+
+//         // Check if the email is for an admin
+//         const isAdmin = email.includes("adminCoder@coder.com");
+
+//         // Skip saving admin users to the database
+//         if (isAdmin) {
+//             // Redirect to the admin profile page
+//             req.session.login = true;
+//             req.session.user = {
+//                 email,
+//                 age,
+//                 first_name,
+//                 last_name,
+//                 isAdmin
+//             };
+//             return res.redirect("/profile");
+//         } else {
+//             // Create a new user
+//             const newUser = await UserModel.create({ first_name, last_name, email, password: createHash(password), age });
+
+//             // Set the session variables
+//             req.session.login = true;
+//             req.session.user = { 
+//                 email, 
+//                 age, 
+//                 first_name, 
+//                 last_name,
+//                 isAdmin
+//             };
+
+//             // Redirect to the regular profile page
+//             res.redirect("/profile");
+//         }
+//     } catch (error) {
+//         console.error("Error creating user:", error);
+//         res.status(500).send("Server Error");
+//     }
+// });
+
+// router.post("/login", async (req, res) => {
+//     const { email, password } = req.body;
+
+//     try {
+//         const usuario = await UserModel.findOne({ email: email });
+//         if (usuario) {
+//             if (usuario.password === password) {
+//                 // Check if the email is for an admin
+//                 const isAdmin = email.includes("adminCoder@coder.com");
+
+//                 req.session.login = true;
+//                 req.session.user = {
+//                     email: usuario.email,
+//                     age: usuario.age,
+//                     first_name: usuario.first_name,
+//                     last_name: usuario.last_name,
+//                     isAdmin
+//                 }
+
+//                 console.log("Login successful for email:", email);
+//                 if (isAdmin) {
+//                     res.redirect("/profile");
+//                 } else {
+//                     res.redirect("/products");
+//                 }
+//             } else {
+//                 console.log("Incorrect password for email:", email);
+//                 res.status(401).send("Contraseña no válida");
+//             }
+//         } else {
+//             console.log("User not found for email:", email);
+//             res.status(404).send("Usuario no encontrado");
+//         }
+//     } catch (error) {
+//         console.error("Error during login:", error);
+//         res.status(500).send("Error interno del servidor");
+//     }
+// });
+
+///////////////////Pre Passport/////////
+
+/////Passport///////
+
+
+
+router.post("/register", passport.authenticate("register", {
+    failureRedirect: "/api/sessions/failedregister"
+}), async (req, res) => {
+
+    if(!req.user) return res.status(400).send("Credenciales invalidas");
+
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email
+    };
+
+    req.session.login = true; 
+
+    res.redirect("/profile");
+})
+
+
+
+router.get("/failedregister", (req, res) => {
+    res.send("Registro fallido");
+})
+
+
+
+router.post("/login", passport.authenticate("login", { failureRedirect:"/api/sessions/faillogin"}), async (req, res) => {
+    if(!req.user) return res.status(400).send("Credenciales invalidas");
+    
+    req.session.user = {
+        first_name: req.user.first_name,
+        last_name: req.user.last_name,
+        age: req.user.age,
+        email: req.user.email
+    };
+
+    req.session.login = true; 
+
+    res.redirect("/profile");
+
+})
+
+router.get("/faillogin", async (req, res) => {
+    res.send("Fallo todooo, revisa el codigo");
+})
+
+
+//github
+
+
+router.get("/github", passport.authenticate("github", {scope: ["user:email"]}), async (req, res) => {})
+
+router.get("/githubcallback", passport.authenticate("github", {failureRedirect:"/login"}), async (req, res) => {
+    //La estrategia de GitHub nos retornará el usurio, entonces lo agregamos a nuestro objeto de session: 
+    req.session.user = req.user;
+    req.session.login = true;
+    res.redirect("/profile");
+})
 
 // Logout
 router.get("/logout", (req, res) => {

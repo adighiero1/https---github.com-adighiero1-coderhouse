@@ -14,6 +14,8 @@ import session from "express-session";
 import FileStore  from "session-file-store";
 import sessionsRouter from "./routes/sessions.router.js";
 import MongoStore from "connect-mongo";
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 const fileStore = FileStore(session);
 // Create an instance of ProductManager
 const productmanager = new ProductManager();
@@ -47,6 +49,11 @@ app.use(session({
         mongoUrl:"mongodb+srv://dighieroalejandro:Cure707buy!@codercluster.jnomixr.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=CoderCluster", ttl: 100
     })
 }))
+
+//Cambios con Passport: 
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // Serve static files from the 'public' directory
