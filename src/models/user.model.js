@@ -21,7 +21,17 @@ const userSchema = new mongoose.Schema({
     age: {
         type: Number,
         required: true
-    }      
+    },
+    role:{
+        type: String,
+        enum:["admin", "user"],
+        default: "user"
+
+    },
+    cartID: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'carts'     
+    }
 })
 
 const UserModel = mongoose.model("user", userSchema);

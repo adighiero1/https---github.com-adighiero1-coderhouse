@@ -1,8 +1,10 @@
-import express from "express";
-const router = express.Router(); 
+// import express from "express";
+// const router = express.Router(); 
 import UserModel from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils/hashbcrypt.js";
-import passport from "passport";
+// import passport from "passport";
+import CartModel from "../models/cart.model.js";
+import Cart from "../cart.js";
 // sessions.router.js
 
 // router.post("/register", async (req, res) => {
@@ -159,82 +161,168 @@ import passport from "passport";
 
 ///////////////////Pre Passport/////////
 
-/////Passport///////
+// /Passport Regular///////
+const router = express.Router();
+import express from 'express';
+import passport from 'passport';
+import jwt from "jsonwebtoken";
+
+// router.post("/register", passport.authenticate("register", {
+//     failureRedirect: "/api/sessions/failedregister"
+// }), async (req, res) => {
+
+//     if(!req.user) return res.status(400).send("Credenciales invalidas");
+
+//     req.session.user = {
+//         first_name: req.user.first_name,
+//         last_name: req.user.last_name,
+//         age: req.user.age,
+//         email: req.user.email
+//     };
+
+//     req.session.login = true; 
+
+//     res.redirect("/profile");
+// })
 
 
 
-router.post("/register", passport.authenticate("register", {
-    failureRedirect: "/api/sessions/failedregister"
-}), async (req, res) => {
-
-    if(!req.user) return res.status(400).send("Credenciales invalidas");
-
-    req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        email: req.user.email
-    };
-
-    req.session.login = true; 
-
-    res.redirect("/profile");
-})
+// router.get("/failedregister", (req, res) => {
+//     res.send("Registro fallido");
+// })
 
 
 
-router.get("/failedregister", (req, res) => {
-    res.send("Registro fallido");
-})
-
-
-
-router.post("/login", passport.authenticate("login", { failureRedirect:"/api/sessions/faillogin"}), async (req, res) => {
-    if(!req.user) return res.status(400).send("Credenciales invalidas");
+// router.post("/login", passport.authenticate("login", { failureRedirect:"/api/sessions/faillogin"}), async (req, res) => {
+//     if(!req.user) return res.status(400).send("Credenciales invalidas");
     
-    req.session.user = {
-        first_name: req.user.first_name,
-        last_name: req.user.last_name,
-        age: req.user.age,
-        email: req.user.email
-    };
+//     req.session.user = {
+//         first_name: req.user.first_name,
+//         last_name: req.user.last_name,
+//         age: req.user.age,
+//         email: req.user.email
+//     };
 
-    req.session.login = true; 
+//     req.session.login = true; 
 
-    res.redirect("/profile");
+//     res.redirect("/profile");
 
+// })
+
+// router.get("/faillogin", async (req, res) => {
+//     res.send("Fallo todooo, revisa el codigo");
+// })
+
+
+// //github
+
+
+// router.get("/github", passport.authenticate("github", {scope: ["user:email"]}), async (req, res) => {})
+
+// router.get("/githubcallback", passport.authenticate("github", {failureRedirect:"/login"}), async (req, res) => {
+//     //La estrategia de GitHub nos retornará el usurio, entonces lo agregamos a nuestro objeto de session: 
+//     req.session.user = req.user;
+//     req.session.login = true;
+//     res.redirect("/profile");
+// })
+
+// // Logout
+// router.get("/logout", (req, res) => {
+//     if(req.session.login) {
+//         req.session.destroy((err) => {
+//             if (err) {
+//                 console.error("Error destroying session:", err);
+//                 return res.status(500).send("Internal Server Error");
+//             }
+//             res.redirect("/login");
+//         });
+//     } else {
+//         res.redirect("/login");
+//     }
+// });
+
+
+// import CartModel from '../models/cart.model.js';
+/////////////////////////////////////////////////////
+
+router.post("/register",async (req,res)=>{
+  //verify if the user exists
+  const{first_name,last_name,email,password,age}=req.body;
+  try{
+    const thisUser= await UserModel.findOne({email});
+    if(thisUser){
+      return res.status("The user already exists");
+    }
+  //create user
+  const newCart = await CartModel.create({ products: [] });
+  const newUser= new UserModel({
+    first_name,
+    last_name,
+    email,
+    // password,
+    password: createHash(password),
+    age,
+    // role,
+    cartID: newCart._id,
+  });
+  await newUser.save();
+
+  const token= jwt.sign({email},"your_jwt_secret_key_here",{expiresIn:"1h"});
+  
+  //sending the token as cookie
+
+  res.cookie("your_cookie_name_here",token,{
+    maxAge: 3600000, //1 hora
+    httpOnly: true
+  })
+   res.redirect("/profile");
+  
+  }catch(error){
+    res.status(500).send("Server Error");
+  }
 })
+
+
+
+
 
 router.get("/faillogin", async (req, res) => {
-    res.send("Fallo todooo, revisa el codigo");
+  res.send("Fallo todooo, revisa el codigo");
 })
 
 
-//github
-
-
-router.get("/github", passport.authenticate("github", {scope: ["user:email"]}), async (req, res) => {})
-
-router.get("/githubcallback", passport.authenticate("github", {failureRedirect:"/login"}), async (req, res) => {
-    //La estrategia de GitHub nos retornará el usurio, entonces lo agregamos a nuestro objeto de session: 
-    req.session.user = req.user;
-    req.session.login = true;
-    res.redirect("/profile");
-})
-
-// Logout
-router.get("/logout", (req, res) => {
-    if(req.session.login) {
-        req.session.destroy((err) => {
-            if (err) {
-                console.error("Error destroying session:", err);
-                return res.status(500).send("Internal Server Error");
-            }
-            res.redirect("/login");
-        });
-    } else {
-        res.redirect("/login");
+router.post("/login", async(req,res)=>{
+  const {email,password}= req.body;
+  try{
+    // lets find the user in mongodb
+    const user= await UserModel.findOne({email});
+    if(!user){
+      res.status(401).send("User is not valid");
     }
-});
+    // verify the password
+    if(!isValidPassword(password, user)){
+      return res.status(401).send("Invalid password!");
+    }
+
+    //generate token
+    const token= jwt.sign({email:user.email,role:user.role},"your_jwt_secret_key_here",{expiresIn:"1h"});
+
+    //sending token as cookie
+    res.cookie("your_cookie_name_here",token,{
+      maxAge: 3600000,
+      httpOnly: true
+    })
+
+    //redirect
+    res.redirect("/profile");
+  }catch(error){
+    res.status(500).send("Internal server error");
+  }
+})
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("your_cookie_name_here");
+  res.redirect("/login");
+})
 
 export default router;
