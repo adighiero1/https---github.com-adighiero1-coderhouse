@@ -306,11 +306,11 @@ import Swal from "sweetalert2";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-import http from "http";
+import SocketManager from "./sockets/socketmanager.js";
+import io from "socket.io-client/dist/socket.io.js";
 
-import FileStore  from "session-file-store";
 import sessionsRouter from "./routes/sessions.router.js";
-import MongoStore from "connect-mongo";
+
 
 const productService = new ProductService(); // Create an instance of ProductService
 
@@ -343,35 +343,4 @@ const httpServer = app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
 
-const io = new Server(httpServer);
-
-io.on("connection", async (socket) => {
-    console.log("client connected");
-
-    socket.emit("products", await productService.getProducts());
-
-    socket.on("deleteProduct", async (id) => {
-        await productService.deleteProduct(id);
-        io.sockets.emit("products", await productService.getProducts());
-    });
-
-    socket.on("addProduct", async (product) => {
-        try {
-            console.log("Adding product:", product);
-            await productService.addProduct(product);
-            io.sockets.emit("products", await productService.getProducts());
-        } catch (error) {
-            console.error("Error adding product:", error);
-        }
-    });
-
-    socket.on("message", async (data) => {
-        try {
-            console.log("Received message:", data);
-            await messageModel.create(data);
-            io.emit("message", data);
-        } catch (error) {
-            console.error("Error saving message:", error);
-        }
-    });
-});
+new SocketManager(httpServer);

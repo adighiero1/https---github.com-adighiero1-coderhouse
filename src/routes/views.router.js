@@ -16,7 +16,7 @@ const viewsController= new ViewsController();
  
  // Create an instance of an Express router
  const router = express.Router();
- 
+ import io from "socket.io-client/dist/socket.io.js";
 ////////////////////////////////////////////////////////////////////////////////
  
 //  router.get("/", async (req, res) => {
