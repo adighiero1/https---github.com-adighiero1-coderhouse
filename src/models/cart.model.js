@@ -8,7 +8,7 @@ const cartSchema = new mongoose.Schema({
             // Reference to a product document in the "Product" collection
             product: {
                 type: mongoose.Schema.Types.ObjectId,  // Type is ObjectId
-                ref: "Product",  // Reference to the "Product" collection
+                ref: "products",  // Reference to the "Product" collection
                 required: true  // Product ID is required
             },
             // Quantity of the product in the cart
@@ -19,6 +19,13 @@ const cartSchema = new mongoose.Schema({
         }
     ]
 });
+
+
+cartSchema.pre('findOne', function (next) {
+    this.populate('products.product', '_id title price');
+    next();
+  });
+
 
 // Create a model based on the cart schema
 const cartModel = mongoose.model("carts", cartSchema);
